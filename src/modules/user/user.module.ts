@@ -12,6 +12,6 @@ import { AdminUserService } from './admin.user.service';
 })
 export class UserModule {
   constructor(adminUserService: AdminUserService) {
-    adminUserService.init()
+    adminUserService.init();
   }
 }

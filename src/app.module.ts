@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import configuration from './configs';
 import { UserModule } from '@/modules/user/user.module';
+import { AuthModule } from '@/modules/auth/auth.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ResponseInterceptor } from './decorators/response';
 
@@ -22,6 +23,7 @@ import { ResponseInterceptor } from './decorators/response';
       }),
     ),
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
