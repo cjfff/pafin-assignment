@@ -4,6 +4,7 @@ export default createConfig({
   env: process.env.SERVER_ENV,
 
   secret: 'PgJtF8kcIR4eNtRZ',
+  jwtSecret: 'd41d8cd98f00b204e9800998ecf8427e',
 
   database: {
     pafin: {

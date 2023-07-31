@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { comparePassword } from '@/helpers';
-import { Repository } from 'typeorm';
-import { User } from '@/entities';
 import { omit } from 'lodash';
+import { Repository } from 'typeorm';
+import { JwtService } from '@nestjs/jwt';
+import { User } from '@/entities';
 import { BusinessError, ERROR_CODE } from '@/errors';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    private jwtService: JwtService,
   ) {}
 
   async signIn(data: {
@@ -33,6 +35,8 @@ export class AuthService {
       throw new BusinessError(ERROR_CODE.AUTH.PASSWORD_WRONG);
     }
 
-    return omit(user, 'password');
+    const access_token = this.jwtService.signAsync(omit(user, 'password'));
+
+    return access_token;
   }
 }
