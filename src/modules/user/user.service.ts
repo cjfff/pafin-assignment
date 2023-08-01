@@ -58,25 +58,25 @@ export class UserService {
       );
     }
 
-    if (id === user.id || user.isAdmin) {
-      const currentUser = await this.userRepository.findOne({
-        where: {
-          id,
-        },
-      });
-
-      if (!currentUser) {
-        throw new BusinessError(ERROR_CODE.AUTH.USER_INVALID);
-      }
-
-      currentUser.isArchived = true;
-
-      this.userRepository.save(currentUser);
-
-      return true;
-    } else {
+    if ((id !== user.id && !user.isAdmin) || !user.isAdmin) {
       throw new BusinessError(ERROR_CODE.AUTH.DELTE_USER_FAILED);
     }
+
+    const currentUser = await this.userRepository.findOne({
+      where: {
+        id,
+      },
+    });
+
+    if (!currentUser) {
+      throw new BusinessError(ERROR_CODE.AUTH.USER_INVALID);
+    }
+
+    currentUser.isArchived = true;
+
+    this.userRepository.save(currentUser);
+
+    return true;
   }
 
   async findAll() {
