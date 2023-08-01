@@ -52,15 +52,7 @@ export class UserService {
   }
 
   async delete(id: string, user: User) {
-    if (id && !isUUID(id)) {
-      throw new BusinessError(
-        `Invalid id, UUID format expected but received ${id}`,
-      );
-    }
-
-    if ((id !== user.id && !user.isAdmin) || !user.isAdmin) {
-      throw new BusinessError(ERROR_CODE.AUTH.DELTE_USER_FAILED);
-    }
+    await this.checkCommon(id, user);
 
     const currentUser = await this.userRepository.findOne({
       where: {
@@ -77,6 +69,18 @@ export class UserService {
     this.userRepository.save(currentUser);
 
     return true;
+  }
+
+  private async checkCommon(id: string, user: User) {
+    if (id && !isUUID(id)) {
+      throw new BusinessError(
+        `Invalid id, UUID format expected but received ${id}`,
+      );
+    }
+
+    if ((id !== user.id && !user.isAdmin) || !user.isAdmin) {
+      throw new BusinessError(ERROR_CODE.AUTH.OPERATION_FAILED);
+    }
   }
 
   async findAll() {
