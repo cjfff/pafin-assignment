@@ -16,7 +16,7 @@ export class UserService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
-  // create, retrieve, update, and delete data
+
   async create(data: DTO.CreateUserDto, user: User) {
     const userData = {
       ...data,
@@ -157,13 +157,5 @@ export class UserService {
     await this.userRepository.save(user);
 
     return true;
-  }
-
-  async findAll() {
-    return this.userRepository.find({
-      where: {
-        isArchived: false,
-      },
-    });
   }
 }
