@@ -47,18 +47,36 @@ export class UserService {
     });
   }
 
-  async update(data: User) {
-    return this.userRepository.save(data);
+  async update(id: string, data: DTO.UpdateUserDto, user: User) {
+    if (!Object.keys(data).length) return true;
+
+    await this.checkCommon(id, user);
+
+    if (data.password && data.password !== data.confirmPassword) {
+      throw new BusinessError(ERROR_CODE.AUTH.PASSWORD_NOT_MATCH);
+    }
+
+    const currentUser = await this.getCurrentUser(id);
+
+    if (data.email) {
+      currentUser.email = data.email;
+    }
+
+    if (data.name) {
+      currentUser.name = data.name;
+    }
+
+    currentUser.lastChangedBy = user.id;
+
+    await this.userRepository.save(currentUser);
+
+    return true;
   }
 
   async delete(id: string, user: User) {
     await this.checkCommon(id, user);
 
-    const currentUser = await this.userRepository.findOne({
-      where: {
-        id,
-      },
-    });
+    const currentUser = await this.getCurrentUser(id);
 
     if (!currentUser) {
       throw new BusinessError(ERROR_CODE.AUTH.USER_INVALID);
@@ -81,6 +99,14 @@ export class UserService {
     if ((id !== user.id && !user.isAdmin) || !user.isAdmin) {
       throw new BusinessError(ERROR_CODE.AUTH.OPERATION_FAILED);
     }
+  }
+
+  private async getCurrentUser(id: string) {
+    return this.userRepository.findOne({
+      where: {
+        id,
+      },
+    });
   }
 
   async findAll() {

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Delete, Param } from '@nestjs/common';
+import { Controller, Post, Body, Delete, Param, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import * as DTO from './dtos';
 import * as AuthDTO from '@/modules/auth/dtos';
@@ -31,7 +31,6 @@ export class UserController {
     return this.userService.create(body, user);
   }
 
-
   @Delete('/:userId')
   @ApiOperation({ summary: 'deleted an account' })
   @ApiResponse({
@@ -46,5 +45,25 @@ export class UserController {
   })
   DeleteUserById(@Param('userId') id: string, @User() user: UserEntity) {
     return this.userService.delete(id, user);
+  }
+
+  @Put('/:userId')
+  @ApiOperation({ summary: 'update userInfo' })
+  @ApiResponse({
+    status: 200,
+    description: 'deleted success',
+    type: DTO.DeleteErrorRes,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'when the paramater given is wrong',
+    type: DTO.DeletedErrorRes,
+  })
+  UpdateUserById(
+    @Param('userId') id: string,
+    @Body() updateData: DTO.UpdateUserDto,
+    @User() user: UserEntity,
+  ) {
+    return this.userService.update(id, updateData, user);
   }
 }

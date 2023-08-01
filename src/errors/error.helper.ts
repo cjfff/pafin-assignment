@@ -10,6 +10,7 @@ export const ERROR_CODE = {
     PASSWORD_WRONG: 1000,
     USER_INVALID: 1001,
     OPERATION_FAILED: 1003,
+    PASSWORD_NOT_MATCH: 1004
   },
 
   ACOUNT_EXISTED: 1002,
@@ -27,4 +28,5 @@ export const ERROR_MSG = {
   1001: 'account invalid',
   1002: 'account existed',
   1003: 'You are not allowed to take this operation',
+  1004: 'password not matched',
 } as const;

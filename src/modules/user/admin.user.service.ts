@@ -14,7 +14,7 @@ export class AdminUserService {
   async init() {
     const name = 'admin';
     const password = createUserHash('admin');
-    const email = 'cjfff1996@mgail.com';
+    const email = 'cjfff1996@gmail.com';
 
     const user = await this.userRepository.findOne({
       where: {
