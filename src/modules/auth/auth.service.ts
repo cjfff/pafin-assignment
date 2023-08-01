@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@/entities';
 import { BusinessError, ERROR_CODE } from '@/errors';
+import * as DTO from './dtos';
 
 @Injectable()
 export class AuthService {
@@ -14,15 +15,10 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(data: {
-    username: string;
-    password: string;
-    email: string;
-  }): Promise<any> {
-    const { email, username, password } = data;
+  async signIn(data: DTO.LoginDto): Promise<any> {
+    const { email, password } = data;
     const user = await this.userRepository.findOne({
       where: {
-        name: username,
         email,
       },
     });

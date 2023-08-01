@@ -26,7 +26,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
       map((data) => {
         const res: Response<T> = {
           data,
-          code: 0,
+          statusCode: 0,
           message: 'success',
         };
 

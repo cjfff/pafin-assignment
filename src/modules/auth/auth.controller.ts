@@ -1,15 +1,9 @@
-import {
-  Body,
-  Controller,
-  Post,
-  HttpCode,
-  HttpStatus,
-  Get,
-  Request,
-} from '@nestjs/common';
+import { Body, Controller, Post, Get, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from './auth.decorator';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
+import * as DTO from './dtos';
+import { omit } from 'lodash';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -17,18 +11,38 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Public()
-  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'login' })
+  @ApiResponse({
+    status: 200,
+    description: 'return jwt token',
+    type: DTO.LoginRes,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'when the password or account is wrong',
+    type: DTO.LoginErrorRes,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'when the paramater given is wrong',
+    type: DTO.ErrorRes,
+  })
   @Post('login')
-  signIn(@Body() signInDto: Record<string, any>) {
+  signIn(@Body() signInDto: DTO.LoginDto) {
     return this.authService.signIn({
-      username: signInDto.username,
       password: signInDto.password,
       email: signInDto.email,
     });
   }
 
   @Get('profile')
+  @ApiOperation({ summary: 'get user infomation' })
+  @ApiResponse({
+    status: 200,
+    description: 'return the use info, use for test jwt work or not',
+    type: DTO.ProfileRes,
+  })
   getProfile(@Request() req) {
-    return req.user;
+    return omit(req.user, ['iat', 'exp', 'isArchived']);
   }
 }
