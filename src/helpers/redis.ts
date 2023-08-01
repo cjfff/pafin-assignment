@@ -24,6 +24,7 @@ class Redis {
   get(key: string) {
     const data = this.data[key];
     if (data && data.expire > Date.now()) {
+      delete this.data[key];
       return data.value;
     }
     return null;

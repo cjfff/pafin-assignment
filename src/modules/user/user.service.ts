@@ -129,6 +129,36 @@ export class UserService {
     return code;
   }
 
+  public async resetPassword(data: DTO.ResetDto) {
+    if (data.password !== data.confirmPassword) {
+      throw new BusinessError(ERROR_CODE.AUTH.PASSWORD_NOT_MATCH);
+    }
+
+    const token = redis.get(`ticket:${data.email}`);
+
+    if (!token || token !== data.ticket) {
+      throw new BusinessError('ticket expired or invalid');
+    }
+
+    const user = await await this.userRepository.findOne({
+      where: {
+        email: data.email,
+      },
+    });
+
+    if (!user) {
+      throw new BusinessError(ERROR_CODE.AUTH.USER_INVALID);
+    }
+
+    console.log(user, data)
+
+    user.password = createUserHash(data.password);
+
+    await this.userRepository.save(user);
+
+    return true;
+  }
+
   async findAll() {
     return this.userRepository.find({
       where: {

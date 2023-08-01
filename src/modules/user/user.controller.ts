@@ -93,4 +93,21 @@ export class UserController {
   GetTicketByEmail(@Query() data: DTO.GetTicketDto) {
     return this.userService.getTicket(data.email);
   }
+
+  @Public()
+  @Post('/reset')
+  @ApiOperation({ summary: 'reset password' })
+  @ApiResponse({
+    status: 200,
+    description: 'reset password success',
+    type: DTO.ResetDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'when the paramater given is wrong',
+    type: DTO.DeletedErrorRes,
+  })
+  ResetPassword(@Body() data: DTO.ResetDto) {
+    return this.userService.resetPassword(data);
+  }
 }
