@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from '@/entities';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as DTO from './dtos';
 
 @Injectable()
 export class UserService {
@@ -10,7 +11,8 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
   // create, retrieve, update, and delete data
-  async create(data: User) {
+  async create(data: DTO.CreateUserDto) {
+    console.log(data, 'data');
     return this.userRepository.save(data);
   }
 
