@@ -7,6 +7,8 @@ import { createUserHash } from '@/helpers';
 import { omit } from 'lodash';
 import { BusinessError, ERROR_CODE } from '@/errors';
 import { isUUID } from 'class-validator';
+import { getValidateCode } from '@/helpers/ticket';
+import redis from '@/helpers/redis';
 
 @Injectable()
 export class UserService {
@@ -107,6 +109,24 @@ export class UserService {
         id,
       },
     });
+  }
+
+  public async getTicket(email: string) {
+    const user = await await this.userRepository.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      throw new BusinessError(ERROR_CODE.AUTH.USER_INVALID);
+    }
+
+    const code = getValidateCode(6);
+
+    redis.set(`ticket:${email}`, code, 60 * 5);
+
+    return code;
   }
 
   async findAll() {

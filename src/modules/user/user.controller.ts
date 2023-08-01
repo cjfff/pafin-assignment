@@ -1,10 +1,20 @@
-import { Controller, Post, Body, Delete, Param, Put } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Delete,
+  Param,
+  Put,
+  Get,
+  Query,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import * as DTO from './dtos';
 import * as AuthDTO from '@/modules/auth/dtos';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@/decorators/user.decorator';
 import { User as UserEntity } from '@/entities';
+import { Public } from '../auth/auth.decorator';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
@@ -65,5 +75,22 @@ export class UserController {
     @User() user: UserEntity,
   ) {
     return this.userService.update(id, updateData, user);
+  }
+
+  @Public()
+  @Get('/ticket')
+  @ApiOperation({ summary: 'get ticket' })
+  @ApiResponse({
+    status: 200,
+    description: 'get ticket',
+    type: DTO.TicketDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'when the paramater given is wrong',
+    type: DTO.DeletedErrorRes,
+  })
+  GetTicketByEmail(@Query() data: DTO.GetTicketDto) {
+    return this.userService.getTicket(data.email);
   }
 }
