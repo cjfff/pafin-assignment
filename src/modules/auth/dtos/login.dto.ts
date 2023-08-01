@@ -30,30 +30,20 @@ export class LoginRes extends BaseDto {
   data: LoginResDTO;
 }
 
-export class ErrorRes {
+export class LoginErrorRes {
   @ApiProperty({
-    example: 400,
+    example: 1001,
+    enum: [1001, 1000, 400],
   })
   statusCode: number;
 
   @ApiProperty({
-    example: ['email should not be empty', 'password should not be empty'],
+    example: [
+      'password error, please try again or retrieve password by registered email',
+    ],
   })
   message: string[];
 
   @ApiProperty()
-  error: string;
-}
-
-export class LoginErrorRes {
-  @ApiProperty({
-    example: 1001,
-  })
-  statusCode: number;
-
-  @ApiProperty({
-    example:
-      'password error, please try again or retrieve password by registered email',
-  })
-  message: string[];
+  error?: string;
 }

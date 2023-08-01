@@ -18,14 +18,9 @@ export class AuthController {
     type: DTO.LoginRes,
   })
   @ApiResponse({
-    status: 401,
+    status: 400,
     description: 'when the password or account is wrong',
     type: DTO.LoginErrorRes,
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'when the paramater given is wrong',
-    type: DTO.ErrorRes,
   })
   @Post('login')
   signIn(@Body() signInDto: DTO.LoginDto) {

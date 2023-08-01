@@ -9,6 +9,7 @@ export const ERROR_CODE = {
   AUTH: {
     PASSWORD_WRONG: 1000,
     USER_INVALID: 1001,
+    DELTE_USER_FAILED: 1003,
   },
 
   ACOUNT_EXISTED: 1002,
@@ -25,4 +26,5 @@ export const ERROR_MSG = {
   1000: 'password error, please try again or retrieve password by registered email',
   1001: 'account invalid',
   1002: 'account existed',
+  1003: 'You are not allowed to delete this user',
 } as const;

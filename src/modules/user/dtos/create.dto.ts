@@ -24,18 +24,6 @@ export class CreateUserDto {
   password: string;
 }
 
-export class RegisterErrorRes {
-  @ApiProperty({
-    example: 1003,
-  })
-  statusCode: number;
-
-  @ApiProperty({
-    example: 'account existed',
-  })
-  message: string;
-}
-
 export class RegisterValidateErrorRes {
   @ApiProperty({
     example: 400,

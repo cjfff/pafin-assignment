@@ -6,6 +6,7 @@ import * as DTO from './dtos';
 import { createUserHash } from '@/helpers';
 import { omit } from 'lodash';
 import { BusinessError, ERROR_CODE } from '@/errors';
+import { isUUID } from 'class-validator';
 
 @Injectable()
 export class UserService {
@@ -25,6 +26,7 @@ export class UserService {
     const existed = await this.userRepository.findOne({
       where: {
         email: data.email,
+        isActive: false,
       },
     });
 
@@ -49,18 +51,32 @@ export class UserService {
     return this.userRepository.save(data);
   }
 
-  async delete(data: User) {
-    const user = await this.userRepository.findOne({
-      where: {
-        id: data.id,
-      },
-    });
+  async delete(id: string, user: User) {
+    if (id && !isUUID(id)) {
+      throw new BusinessError(
+        `Invalid id, UUID format expected but received ${id}`,
+      );
+    }
 
-    user.isArchived = true;
+    if (id === user.id || user.isAdmin) {
+      const currentUser = await this.userRepository.findOne({
+        where: {
+          id,
+        },
+      });
 
-    this.userRepository.save(user);
+      if (!currentUser) {
+        throw new BusinessError(ERROR_CODE.AUTH.USER_INVALID);
+      }
 
-    return true;
+      currentUser.isArchived = true;
+
+      this.userRepository.save(currentUser);
+
+      return true;
+    } else {
+      throw new BusinessError(ERROR_CODE.AUTH.DELTE_USER_FAILED);
+    }
   }
 
   async findAll() {

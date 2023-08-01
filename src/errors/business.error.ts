@@ -22,9 +22,9 @@ export class BusinessError extends OriginHttpException {
     super(
       {
         statusCode,
-        message,
+        message: [message],
       },
-      HttpStatus.OK,
+      HttpStatus.BAD_REQUEST,
     );
   }
 }
