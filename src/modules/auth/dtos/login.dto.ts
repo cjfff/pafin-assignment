@@ -34,7 +34,7 @@ export class ErrorRes {
   @ApiProperty({
     example: 400,
   })
-  status_code: number;
+  statusCode: number;
 
   @ApiProperty({
     example: ['email should not be empty', 'password should not be empty'],
@@ -49,7 +49,7 @@ export class LoginErrorRes {
   @ApiProperty({
     example: 1001,
   })
-  status_code: number;
+  statusCode: number;
 
   @ApiProperty({
     example:

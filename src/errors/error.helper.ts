@@ -10,6 +10,8 @@ export const ERROR_CODE = {
     PASSWORD_WRONG: 1000,
     USER_INVALID: 1001,
   },
+
+  ACOUNT_EXISTED: 1002,
 } as const;
 
 export const ERROR_MSG = {
@@ -21,5 +23,6 @@ export const ERROR_MSG = {
   '-5': 'attempt too many times',
 
   1000: 'password error, please try again or retrieve password by registered email',
-  1001: 'accounr invalid',
+  1001: 'account invalid',
+  1002: 'account existed',
 } as const;
