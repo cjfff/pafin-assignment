@@ -9,12 +9,14 @@ import { BusinessError, ERROR_CODE } from '@/errors';
 import { isUUID } from 'class-validator';
 import { getValidateCode } from '@/helpers/ticket';
 import redis from '@/helpers/redis';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private readonly mailerService: MailerService,
   ) {}
 
   async create(data: DTO.CreateUserDto, user: User) {
@@ -126,6 +128,17 @@ export class UserService {
 
     redis.set(`ticket:${email}`, code, 60 * 5);
 
+    // if not provide the mail_user, this function is not enable
+    if (process.env.MAIL_USER) {
+      await this.mailerService.sendMail({
+        to: email,
+        from: `Pafin Notification <${process.env.MAIL_USER}>`,
+        subject: '[pafin] verification code notification',
+        html: `Your verification code is [<b>${code}</b>], valid for 5 minutes, and can only be used once.`,
+      });
+    }
+
+
     return code;
   }
 
@@ -150,7 +163,7 @@ export class UserService {
       throw new BusinessError(ERROR_CODE.AUTH.USER_INVALID);
     }
 
-    console.log(user, data)
+    console.log(user, data);
 
     user.password = createUserHash(data.password);
 
