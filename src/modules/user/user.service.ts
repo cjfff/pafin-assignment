@@ -138,8 +138,7 @@ export class UserService {
       });
     }
 
-
-    return code;
+    return { ticket: code };
   }
 
   public async resetPassword(data: DTO.ResetDto) {
