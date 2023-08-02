@@ -18,8 +18,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
         port: 465,
         secure: true, // upgrade later with STARTTLS
         auth: {
-          user: process.env.MAIL_USER,
-          pass: process.env.MAIL_PASS,
+          user: process.env.MAIL_USER || '',
+          pass: process.env.MAIL_PASS || '',
         },
       },
       defaults: {

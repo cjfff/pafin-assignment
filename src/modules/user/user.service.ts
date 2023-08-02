@@ -129,7 +129,7 @@ export class UserService {
     redis.set(`ticket:${email}`, code, 60 * 5);
 
     // if not provide the mail_user, this function is not enable
-    if (process.env.MAIL_USER) {
+    if (process.env.MAIL_USER && process.env.MAIL_PASS) {
       await this.mailerService.sendMail({
         to: email,
         from: `Pafin Notification <${process.env.MAIL_USER}>`,
