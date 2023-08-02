@@ -6,6 +6,8 @@ framework [Nest](https://github.com/nestjs/nest)
 
 ## Installation
 
+make sure your node.js version is above 16
+
 ```bash
 $ yarn install
 ```
