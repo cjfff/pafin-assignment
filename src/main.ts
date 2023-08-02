@@ -8,7 +8,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 const defaultPort = process.env.PORT || 3000;
 
-const globalPrefix = '/pafin/api/v1/';
+export const globalPrefix = '/pafin/api/v1/';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

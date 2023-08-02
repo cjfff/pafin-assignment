@@ -1,5 +1,5 @@
 import { MD5 } from 'crypto-js';
-import config from 'src/configs';
+import config from '@/configs';
 
 export const createUserHash = (password: string) => {
   return MD5(`${password}:${config().secret}`).toString();

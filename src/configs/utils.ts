@@ -14,7 +14,7 @@ export function normalDatabase(database: IConfig['database']) {
     res[name as keyof IConfig['database']] = {
       name,
       type: 'postgres',
-      entities: [path.join(__dirname, '..', 'entities', '*.entity.js')],
+      entities: [path.join(__dirname, '..', 'entities', '*.entity.{js,ts}')],
       synchronize: isDevelopment,
       logging: isDevelopment ? true : ['error'],
       charset: 'utf8mb4',
