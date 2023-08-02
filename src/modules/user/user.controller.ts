@@ -11,7 +11,7 @@ import {
 import { UserService } from './user.service';
 import * as DTO from './dtos';
 import * as AuthDTO from '@/modules/auth/dtos';
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@/decorators/user.decorator';
 import { User as UserEntity } from '@/entities';
 import { Public } from '../auth/auth.decorator';
@@ -109,5 +109,26 @@ export class UserController {
   })
   ResetPassword(@Body() data: DTO.ResetDto) {
     return this.userService.resetPassword(data);
+  }
+
+  @Get('/:id')
+  @ApiOperation({ summary: 'get userInfo' })
+  @ApiResponse({
+    status: 200,
+    description: 'registered success',
+    type: AuthDTO.ProfileRes,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'when the account is existed',
+    type: DTO.RegisterValidateErrorRes,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'when the paramater given is wrong',
+    type: DTO.RegisterValidateErrorRes,
+  })
+  GetUsrById(@Param('id') id: string, @User() user: UserEntity) {
+    return this.userService.getUserById(id, user);
   }
 }

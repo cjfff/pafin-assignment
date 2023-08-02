@@ -38,7 +38,7 @@ export class UserService {
       throw new BusinessError(ERROR_CODE.ACOUNT_EXISTED);
     }
 
-    const newUser = this.userRepository.save(userData);
+    const newUser = await this.userRepository.save(userData);
 
     return omit(newUser, ['password', 'isArchived', 'iat', 'exp']);
   }
@@ -169,5 +169,22 @@ export class UserService {
     await this.userRepository.save(user);
 
     return true;
+  }
+
+  public async getUserById(id: string, user: User) {
+    await this.checkCommon(id, user);
+
+    const currentUser = await this.userRepository.findOne({
+      where: {
+        id,
+        isArchived: false,
+      },
+    });
+
+    if (!currentUser) {
+      throw new BusinessError(ERROR_CODE.USER_NOT_FOUND);
+    }
+
+    return currentUser;
   }
 }
